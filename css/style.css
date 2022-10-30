@@ -1,0 +1,34 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#container {
+    width: 100%;
+    height: 100vh;
+}
+
+#addPageContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#addPage {
+    width: 50px;
+    height: 50px;
+}
+
+.note {
+    background-color: antiquewhite;
+    border: 1px solid black;
+    border-radius: 10px;
+    min-height: 30px;
+    min-width: 30px;
+    resize: both;
+    overflow: auto;
+    max-height: fit-content;
+    max-width: fit-content;
+    cursor: pointer;
+}
