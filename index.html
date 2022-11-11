@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fridge</title>
-    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-    <script src="./dist/main.bundle.js" defer></script>
-    <link rel="stylesheet" href="./css/style.css">
-</head>
-<body>
-    <div id="container">
-        <div id="addPageContainer">
-            <div id="addPage"><box-icon type='solid' name='message-add'></box-icon></div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Stickies</title>
+        <link rel="stylesheet" href="./css/style.css" />
+        <script src="./dist/main.bundle.js" defer></script>
+        <link rel="icon" type="image/x-icon" href="./img/fridge.ico" />
+    </head>
+
+    <body id="body">
+        <div class="mainContainer">
+            <h1 class="header">
+                <box-icon
+                    id="fridgeIcon"
+                    name="fridge"
+                    type="solid"
+                    color="#f4bf4f"
+                    class="header-icon"
+                ></box-icon>
+                Stickies
+            </h1>
+            <div class="form_group field">
+                <input
+                    id="fridgeName"
+                    name="fridgeName"
+                    type="input"
+                    class="form_field"
+                    placeholder="Fridge"
+                    required
+                />
+                <label for="name" class="form_label">Fridge</label>
+                <button class="button" id="send" disabled>Open</button>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
