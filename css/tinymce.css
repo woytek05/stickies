@@ -1,0 +1,57 @@
+div.dark {
+    z-index: 2;
+    position: absolute;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    opacity: 1;
+    pointer-events: auto;
+    transition: 1s ease-in;
+}
+
+div.editor {
+    z-index: 3;
+    width: 500px;
+    height: 325px;
+    border-radius: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    justify-content: center;
+    background-color: rgb(34, 47, 62);
+    opacity: 1;
+    pointer-events: auto;
+    transition: 1s ease;
+}
+
+textarea {
+    display: none;
+}
+
+.x-circle {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.save {
+    position: absolute;
+    bottom: 0;
+    right: 25px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+ol {
+    list-style-type: decimal;
+}

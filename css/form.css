@@ -1,0 +1,81 @@
+.formGroup {
+    display: flex;
+    gap: 20px;
+    position: relative;
+    padding: 15px 0 0;
+    margin-top: 10px;
+    width: 50%;
+}
+
+.formField {
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid var(--gray);
+    outline: 0;
+    font-size: 1.3rem;
+    color: var(--white);
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+    z-index: 2;
+}
+
+.formLabel {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: var(--gray);
+}
+
+.formField::placeholder {
+    color: transparent;
+}
+
+.formField:placeholder-shown ~ .formLabel {
+    font-size: 1.3rem;
+    cursor: text;
+    top: 20px;
+}
+
+.formField:focus {
+    padding-bottom: 6px;  
+    font-weight: 700;
+    border-width: 3px;
+    border-color: #f4bf4f;
+    border-image-slice: 1;
+}
+
+.formField:focus ~ .formLabel {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: #f4bf4f;
+    font-weight: 700;
+}
+
+.formField:required, .formField:invalid {
+    box-shadow: none;
+}
+
+.button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--gray);
+    border-radius: 6px;
+    border-width: 0;
+    color: #fff;
+    cursor: not-allowed;
+    font-size: 100%;
+    outline: none;
+    overflow: hidden;
+    padding: 0 25px;
+    text-transform: none;
+    transition: all 0.2s ease-in;
+    user-select: none;
+}

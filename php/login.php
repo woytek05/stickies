@@ -14,7 +14,12 @@ try {
     if ($connection->connect_errno != 0) {
         throw new Exception(mysqli_connect_errno());
     } else {
-        if ($result = $connection->query("SELECT * FROM fridges WHERE fridgeName='$fridgeName'")) {
+        if ($result = $connection->query(
+            sprintf(
+                "SELECT * FROM fridges WHERE fridgeName='%s'",
+                mysqli_real_escape_string($connection, $fridgeName)
+            )
+        )) {
             if ($result->num_rows > 0) {
                 $row = $result->fetch_assoc();
                 $json['fridgeName'] = $row['fridgeName'];

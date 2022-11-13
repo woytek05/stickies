@@ -2,25 +2,37 @@ import Note from "./note";
 import { fridgeJson } from "./fridgeJson";
 
 export default class Fridge {
-    protected fridgeName: string = "";
-    protected mainContainerID: string = "";
-    protected addPageID: string = "";
+    public fridgeName: string = "";
+    public mainContainerID: string = "";
+    public mainContainer: HTMLDivElement;
+    public addNoteID: string = "";
+    public addNoteContainer: HTMLElement;
+    public numOfActiveNotesParagraph: HTMLParagraphElement;
+    public numOfAllNotesParagraph: HTMLParagraphElement;
+    public infoContainer: HTMLDivElement;
+
     protected notes: Set<Note> = new Set();
     protected numOfActiveNotes: number = 0;
     protected numOfAllNotes: number = 0;
-    protected noteID: number = 0;
+    protected noteIdIterator: number = 0;
 
     constructor(
         fridgeName: string,
         mainContainerID: string,
-        addPageID: string,
+        addNoteID: string,
         notes?: Set<Note>,
         numOfActiveNotes?: number,
         numOfAllNotes?: number
     ) {
         this.fridgeName = fridgeName;
         this.mainContainerID = mainContainerID;
-        this.addPageID = addPageID;
+        this.mainContainer = document.getElementById(
+            this.mainContainerID
+        ) as HTMLDivElement;
+        this.addNoteID = addNoteID;
+        this.addNoteContainer = document.getElementById(
+            this.addNoteID
+        ) as HTMLElement;
         if (notes) {
             this.notes = notes;
         }
@@ -30,45 +42,61 @@ export default class Fridge {
         if (numOfAllNotes) {
             this.numOfAllNotes = numOfAllNotes;
         }
-        document
-            .getElementById(this.addPageID)
-            .addEventListener("click", () => {
-                let note = new Note(
-                    `${this.fridgeName}_${this.noteID}`,
-                    this.mainContainerID,
-                    this.fridgeName
-                );
-                this.noteID++;
-                // TODO: zIndex
-                // note.noteContainer.addEventListener("click", () => {
-                //     note.zIndex;
-                // });
+        this.addNoteContainer.addEventListener("click", () => {
+            let note = new Note(
+                `${this.fridgeName}_${this.noteIdIterator}`,
+                this.mainContainerID,
+                this.fridgeName
+            );
+            this.noteIdIterator++;
+            // TODO: zIndex
+            // note.noteContainer.addEventListener("click", () => {
+            //     note.zIndex;
+            // });
 
-                note.closeIconContainer.addEventListener("click", () => {
-                    console.log("AAAA");
-                    // note.removeNote();
-                    // this.notes.delete(note);
-                    // this.numOfActiveNotes--;
-                    // note.send(true);
-                    // this.send();
-                });
-                this.notes.add(note);
-                this.numOfActiveNotes += 1;
-                this.numOfAllNotes += 1;
-                note.send(false);
-                this.send();
-            });
+            this.addEventListenersToNote(note);
+            this.notes.add(note);
+
+            this.numOfActiveNotes += 1;
+            this.numOfAllNotes += 1;
+            this.updateInfoParagraphs();
+
+            note.send(false);
+            this.send();
+        });
+
+        this.numOfActiveNotesParagraph = this.createInfoParagraph();
+        this.numOfAllNotesParagraph = this.createInfoParagraph();
+        this.updateInfoParagraphs();
+        this.infoContainer = this.createInfoContainer();
+        this.infoContainer.appendChild(this.numOfActiveNotesParagraph);
+        this.infoContainer.appendChild(this.numOfAllNotesParagraph);
+        this.mainContainer.appendChild(this.infoContainer);
     }
 
     addNote(note: Note) {
         this.notes.add(note);
     }
 
+    addEventListenersToNote(note: Note) {
+        note.closeIconContainer.addEventListener("click", () => {
+            note.removeNote();
+            this.notes.delete(note);
+            this.numOfActiveNotes--;
+            this.updateInfoParagraphs();
+            note.send(true);
+            this.send();
+        });
+        note.editIconContainer.addEventListener("click", () => {
+            note.showEditor();
+        });
+    }
+
     static fromJSON(json: fridgeJson) {
         let fridge = new Fridge(
             json.fridgeName,
             "mainContainer",
-            "addPage",
+            "addNote",
             new Set<Note>(),
             json.numOfActiveNotes,
             json.numOfAllNotes
@@ -76,7 +104,7 @@ export default class Fridge {
 
         for (const note of json.notes) {
             let noteObject = new Note(
-                `${fridge.fridgeName}_${fridge.noteID}`,
+                note.noteID,
                 "mainContainer",
                 fridge.fridgeName,
                 note.noteText,
@@ -86,11 +114,29 @@ export default class Fridge {
                 note.height,
                 note.zIndex
             );
+            fridge.addEventListenersToNote(noteObject);
             fridge.addNote(noteObject);
-            fridge.noteID++;
+            fridge.noteIdIterator++;
         }
 
         return fridge;
+    }
+
+    createInfoContainer() {
+        const infoContainer: HTMLDivElement = document.createElement("div");
+        infoContainer.classList.add("info");
+        return infoContainer;
+    }
+
+    updateInfoParagraphs() {
+        this.numOfActiveNotesParagraph.innerText = `Active notes: ${this.numOfActiveNotes}`;
+        this.numOfAllNotesParagraph.innerText = `All notes: ${this.numOfAllNotes}`;
+    }
+
+    createInfoParagraph() {
+        const infoParagraph: HTMLParagraphElement = document.createElement("p");
+        infoParagraph.style.userSelect = "none";
+        return infoParagraph;
     }
 
     send() {

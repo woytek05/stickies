@@ -1,55 +1,44 @@
-import Fridge from "./fridge";
+import enableButton from "./enableButton";
+import disableButton from "./disableButton";
+import createFridge from "./createFridge";
 import "boxicons";
 
-const mainColor = "#f4bf4f";
-const grayColor = "#9b9b9b";
+const defaultColor = "#f4bf4f";
+const hoverColor = "#c3983f";
+const gray = "#9b9b9b";
 
 const sendButton = document.getElementById("send") as HTMLButtonElement;
 const fridgeNameInput = document.getElementById(
     "fridgeName"
 ) as HTMLInputElement;
 
+fridgeNameInput.value = "";
+disableButton(sendButton, gray);
+
 fridgeNameInput.addEventListener("input", () => {
     if (fridgeNameInput.value != "") {
-        sendButton.disabled = false;
-        sendButton.style.cursor = "pointer";
-        sendButton.style.backgroundColor = mainColor;
+        enableButton(sendButton, defaultColor);
     } else {
-        sendButton.disabled = true;
-        sendButton.style.cursor = "not-allowed";
-        sendButton.style.backgroundColor = grayColor;
+        disableButton(sendButton, gray);
+    }
+    let onlySpaces = true;
+    for (const letter of fridgeNameInput.value) {
+        if (letter != " ") {
+            onlySpaces = false;
+        }
+    }
+    if (onlySpaces) {
+        disableButton(sendButton, gray);
+    }
+});
+
+fridgeNameInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+        e.preventDefault();
+        sendButton.click();
     }
 });
 
 sendButton.addEventListener("click", () => {
-    const xhttp = new XMLHttpRequest();
-    let el = document.getElementById("fridgeName") as HTMLInputElement;
-    let fridgeName = encodeURIComponent(el.value);
-    xhttp.open("POST", "php/login.php");
-
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            let json = JSON.parse(this.responseText);
-            createContainers();
-            let fridge = Fridge.fromJSON(json);
-        }
-    };
-
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send("fridgeName=" + fridgeName);
+    createFridge(defaultColor, hoverColor);
 });
-
-function createContainers() {
-    const body = document.getElementById("body") as HTMLBodyElement;
-    body.innerHTML = "";
-    const div = document.createElement("div") as HTMLDivElement;
-    div.setAttribute("id", "mainContainer");
-    div.classList.add("mainContainer");
-    const boxIcon = document.createElement("box-icon") as HTMLElement;
-    boxIcon.setAttribute("id", "addPage");
-    boxIcon.setAttribute("type", "solid");
-    boxIcon.setAttribute("color", mainColor);
-    boxIcon.setAttribute("name", "plus-square");
-    div.appendChild(boxIcon);
-    body.appendChild(div);
-}
